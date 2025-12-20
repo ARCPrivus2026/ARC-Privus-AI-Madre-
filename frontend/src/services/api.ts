@@ -97,7 +97,14 @@ class ApiClient {
     return response.data;
   }
 
-  async getAICapabilities(): Promise<any> {
+  async getAICapabilities(): Promise<{
+    capabilities: Array<{
+      name: string;
+      description: string;
+      status: string;
+    }>;
+    modules: Record<string, string>;
+  }> {
     const response = await this.client.get('/api/v1/ai/capabilities');
     return response.data;
   }

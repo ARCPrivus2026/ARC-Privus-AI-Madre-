@@ -34,9 +34,21 @@ class Settings(BaseSettings):
     ]
     
     # Security
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "CHANGE_THIS_IN_PRODUCTION_USE_STRONG_SECRET")
+    SECRET_KEY: str = os.getenv("SECRET_KEY", "")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     ALGORITHM: str = "HS256"
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        if not self.SECRET_KEY:
+            import secrets
+            self.SECRET_KEY = secrets.token_urlsafe(32)
+            import logging
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                "SECRET_KEY not set in environment. Using generated key. "
+                "This is NOT secure for production. Set SECRET_KEY environment variable."
+            )
     
     # Database
     DATABASE_URL: str = os.getenv("DATABASE_URL", "sqlite:///./arc_privus.db")

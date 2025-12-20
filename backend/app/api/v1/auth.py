@@ -48,7 +48,12 @@ async def register(user: UserRegister):
         Success message
         
     Note:
-        In production, this should check for existing users and store in database
+        This is a placeholder implementation for demonstration.
+        In production, this endpoint should:
+        1. Check for existing users in the database
+        2. Store user credentials securely
+        3. Send verification emails
+        4. Implement rate limiting
     """
     logger.info(f"User registration attempt: {user.email}")
     
@@ -56,7 +61,14 @@ async def register(user: UserRegister):
     hashed_password = get_password_hash(user.password)
     
     # TODO: Store user in database
-    # For now, just return success
+    # Example implementation:
+    # db_user = User(
+    #     email=user.email,
+    #     hashed_password=hashed_password,
+    #     full_name=user.full_name
+    # )
+    # db.add(db_user)
+    # db.commit()
     
     return {
         "message": "User registered successfully",
@@ -76,12 +88,27 @@ async def login(credentials: UserLogin):
         Access token
         
     Note:
-        In production, this should verify against database
+        This is a placeholder implementation for demonstration.
+        In production, this endpoint should:
+        1. Query database for user by email
+        2. Verify password against stored hash
+        3. Return 401 if credentials are invalid
+        4. Implement rate limiting and account lockout
+        5. Log authentication attempts
+        
+    Warning:
+        Current implementation does not verify credentials!
+        This is for development/testing only.
     """
     logger.info(f"Login attempt: {credentials.email}")
     
     # TODO: Verify credentials against database
-    # For now, create token for demonstration
+    # Example implementation:
+    # db_user = db.query(User).filter(User.email == credentials.email).first()
+    # if not db_user or not verify_password(credentials.password, db_user.hashed_password):
+    #     raise HTTPException(status_code=401, detail="Invalid credentials")
+    
+    logger.warning("Login endpoint is using placeholder authentication - NOT SECURE FOR PRODUCTION")
     
     access_token = create_access_token(
         data={"sub": credentials.email, "type": "access"}

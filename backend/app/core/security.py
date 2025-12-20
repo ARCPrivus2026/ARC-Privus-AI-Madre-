@@ -109,6 +109,7 @@ def verify_token(credentials: HTTPAuthorizationCredentials = Depends(security)) 
 def sanitize_input(input_string: str) -> str:
     """
     Sanitize user input to prevent injection attacks
+    Uses HTML escaping for XSS prevention
     
     Args:
         input_string: User input to sanitize
@@ -116,11 +117,7 @@ def sanitize_input(input_string: str) -> str:
     Returns:
         Sanitized string
     """
-    # Remove potentially dangerous characters
-    dangerous_chars = ["<", ">", "&", '"', "'", "/", "\\"]
-    sanitized = input_string
-    
-    for char in dangerous_chars:
-        sanitized = sanitized.replace(char, "")
-    
+    import html
+    # Escape HTML entities to prevent XSS
+    sanitized = html.escape(input_string)
     return sanitized.strip()
